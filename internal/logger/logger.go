@@ -9,14 +9,21 @@ import (
 	"time"
 )
 
+// Level represents severity of a log message.
 type Level int8
 
 const (
+	// LevelDebug represents detailed information messages.
 	LevelDebug Level = iota
+	// LevelInfo represents general informational messages.
 	LevelInfo
+	// LevelWarning indicates a potential issue or unexpected behavior.
 	LevelWarning
+	// LevelError indicates an error that occurred during execution.
 	LevelError
+	// LevelFatal indicates a critical error after which the application will terminate.
 	LevelFatal
+	// LevelOff disables all logging.
 	LevelOff
 )
 
@@ -37,12 +44,14 @@ func (l Level) String() string {
 	}
 }
 
+// Logger
 type Logger struct {
 	out      io.Writer
 	minLevel Level
 	mu       sync.Mutex
 }
 
+// New represents new instance of logger
 func New(out io.Writer, minLevel Level) *Logger {
 	return &Logger{
 		out:      out,
@@ -50,26 +59,32 @@ func New(out io.Writer, minLevel Level) *Logger {
 	}
 }
 
+// Writes message with level error to print method
 func (l *Logger) Write(message []byte) (n int, err error) {
 	return l.print(LevelError, string(message), nil)
 }
 
+// Prints debug message with level
 func (l *Logger) PrintDebug(message string, properties map[string]string) {
 	l.print(LevelDebug, message, properties)
 }
 
+// Prints info message with level
 func (l *Logger) PrintInfo(message string, properties map[string]string) {
 	l.print(LevelInfo, message, properties)
 }
 
+// Prints warning message with level
 func (l *Logger) PrintWarning(message string, properties map[string]string) {
 	l.print(LevelWarning, message, properties)
 }
 
+// Prints error with level
 func (l *Logger) PrintError(err error, properties map[string]string) {
 	l.print(LevelError, err.Error(), properties)
 }
 
+// Prints error with level and exits an app
 func (l *Logger) PrintFatal(err error, properties map[string]string) {
 	l.print(LevelFatal, err.Error(), properties)
 	os.Exit(1)
