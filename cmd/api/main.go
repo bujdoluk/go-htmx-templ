@@ -2,16 +2,10 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"net/http"
 	"os"
 
 	"github.com/bujdoluk/go-htmx-templ/internal/logger"
 )
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello World")
-}
 
 type config struct {
 	port int
