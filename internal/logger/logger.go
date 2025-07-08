@@ -44,7 +44,7 @@ func (l Level) String() string {
 	}
 }
 
-// Logger
+// Logger type
 type Logger struct {
 	out      io.Writer
 	minLevel Level
@@ -59,32 +59,32 @@ func New(out io.Writer, minLevel Level) *Logger {
 	}
 }
 
-// Writes message with level error to print method
+// Write writes message with level error to print method
 func (l *Logger) Write(message []byte) (n int, err error) {
 	return l.print(LevelError, string(message), nil)
 }
 
-// Prints debug message with level
+// PrintDebug prints debug message with level
 func (l *Logger) PrintDebug(message string, properties map[string]string) {
 	l.print(LevelDebug, message, properties)
 }
 
-// Prints info message with level
+// PrintInfo prints info message with level
 func (l *Logger) PrintInfo(message string, properties map[string]string) {
 	l.print(LevelInfo, message, properties)
 }
 
-// Prints warning message with level
+// PrintWarning prints warning message with level
 func (l *Logger) PrintWarning(message string, properties map[string]string) {
 	l.print(LevelWarning, message, properties)
 }
 
-// Prints error with level
+// PrintError prints error with level
 func (l *Logger) PrintError(err error, properties map[string]string) {
 	l.print(LevelError, err.Error(), properties)
 }
 
-// Prints error with level and exits an app
+// PrintFatal prints error with level and exits an app
 func (l *Logger) PrintFatal(err error, properties map[string]string) {
 	l.print(LevelFatal, err.Error(), properties)
 	os.Exit(1)
