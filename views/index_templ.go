@@ -29,7 +29,7 @@ func Index() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<html><head><title>Hello</title><script src=\"/static/js/htmx.min.js\"></script></head><body><h1>Hello, World!</h1><button hx-get=\"/hello\" hx-target=\"#response\">Say Hello</button><div id=\"response\"></div></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<html><head><title>Hello</title><script src=\"/static/js/htmx.min.js\"></script></head><body><h1>Hello, World!</h1><button id=\"btn\">Say Hello</button><div id=\"response\"></div><script>\r\n\t\t\t\tdocument.addEventListener(\"DOMContentLoaded\", function () {\r\n                    const button = document.getElementById(\"btn\");\r\n                    const response = document.getElementById(\"response\");\r\n\r\n                    button.addEventListener(\"click\", function () {\r\n                        if (response.innerHTML.trim() === \"\") {\r\n                            htmx.ajax(\"GET\", \"/hello\", {\r\n                                target: \"#response\",\r\n                                swap: \"innerHTML\"\r\n                            });\r\n                            button.innerText = \"Hide Hello\";\r\n                        } else {\r\n                            response.innerHTML = \"\";\r\n                            button.innerText = \"Say Hello\";\r\n                        }\r\n                    });\r\n                });\r\n\t\t\t</script></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

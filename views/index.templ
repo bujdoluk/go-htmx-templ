@@ -8,8 +8,28 @@ templ Index() {
 		</head>
 		<body>
 			<h1>Hello, World!</h1>
-			<button hx-get="/hello" hx-target="#response">Say Hello</button>
+			<button id="btn">Say Hello</button>
 			<div id="response"></div>
+
+			<script>
+				document.addEventListener("DOMContentLoaded", function () {
+                    const button = document.getElementById("btn");
+                    const response = document.getElementById("response");
+
+                    button.addEventListener("click", function () {
+                        if (response.innerHTML.trim() === "") {
+                            htmx.ajax("GET", "/hello", {
+                                target: "#response",
+                                swap: "innerHTML"
+                            });
+                            button.innerText = "Hide Hello";
+                        } else {
+                            response.innerHTML = "";
+                            button.innerText = "Say Hello";
+                        }
+                    });
+                });
+			</script>
 		</body>
 	</html>
 }

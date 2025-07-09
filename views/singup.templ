@@ -1,0 +1,138 @@
+package views
+
+templ SignUp() {
+	<html>
+		<head>
+			<title>Sign Up</title>
+			<script src="/static/js/htmx.min.js"></script>
+			<style>
+				body, html {
+					margin: 0;
+					padding: 0;
+					height: 100%;
+					font-family: sans-serif;
+					background-color: #f9f9f9;
+				}
+
+				.container {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					height: 100%;
+				}
+
+				.signup-box {
+					background: white;
+					padding: 2rem;
+					border-radius: 8px;
+					box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+					width: 300px;
+				}
+
+				.signup-box h1 {
+					text-align: center;
+					margin-bottom: 1.5rem;
+				}
+
+				form {
+					display: grid;
+					gap: 1rem;
+				}
+
+				input {
+					padding: 0.5rem;
+					border: 1px solid #ccc;
+					border-radius: 4px;
+					font-size: 1rem;
+				}
+
+				button {
+					background-color: #313131;
+					color: white;
+					border: none;
+					padding: 0.5rem;
+					border-radius: 4px;
+					font-size: 1rem;
+					cursor: pointer;
+				}
+
+				button:hover {
+					background-color: #0056b3;
+				}
+
+				#response {
+					margin-top: 0.5rem;
+					text-align: center;
+				}
+
+				.login-link {
+					text-align: center;
+					margin-top: 1rem;
+					font-size: 0.9rem;
+				}
+			</style>
+		</head>
+		<body>
+			<div class="container">
+				<div class="signup-box">
+					<h1>Sign Up</h1>
+					<form 
+						id="signup"
+						hx-post="/signup" 
+						hx-target="#response"
+					>
+
+						<input 
+							type="email" 
+							name="email" 
+							placeholder="Email (@example.com only)" 
+							required
+							pattern="^[a-zA-Z0-9._%+\-]+@example\.com$" 
+						/>
+
+						<input 
+							type="password" 
+							name="password"
+							placeholder="Password (min 8 chars, 1 letter, 1 number)" 
+							required
+							pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+							title="Password must be at least 8 characters, include a letter and a number" 
+						/>
+
+						<button type="submit">Create account</button>
+					</form>
+						
+					<div id="response"></div>
+
+					<div class="login-link">
+						<p>Already have an account? <a href="/login">Log in</a></p>
+					</div>
+				</div>
+			</div>
+
+			<script>
+				document.addEventListener("DOMContentLoaded", function () {
+					const form = document.getElementById("signup");
+					const response = document.getElementById("response");
+
+					form.addEventListener("submit", function (event) {
+						event.preventDefault();
+
+						if (!form.checkValidity()) {
+							response.innerHTML = "<p style='color:red;'>Please fill out the form correctly.</p>";
+							return;
+						}
+
+						const formData = new FormData(form);
+
+						htmx.ajax("POST", "/singup", {
+							target: "#response",
+							swap: "innerHTML",
+							values: Object.fromEntries(formData.entries())
+						});
+					});
+				});
+			</script>
+		</body>
+	</html>
+}

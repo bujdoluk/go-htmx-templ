@@ -1,0 +1,131 @@
+package views
+
+templ Login() {
+	<html>
+		<head>
+			<title>Login</title>
+			<script src="/static/js/htmx.min.js"></script>
+			<style>
+				body, html {
+					margin: 0;
+					padding: 0;
+					height: 100%;
+					font-family: sans-serif;
+					background-color: #f9f9f9;
+				}
+
+				.container {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					height: 100%;
+				}
+
+				.login-box {
+					background: white;
+					padding: 2rem;
+					border-radius: 8px;
+					box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+					width: 300px;
+				}
+
+				.login-box h1 {
+					text-align: center;
+					margin-bottom: 1.5rem;
+				}
+
+				form {
+					display: grid;
+					gap: 1rem;
+				}
+
+				input {
+					padding: 0.5rem;
+					border: 1px solid #ccc;
+					border-radius: 4px;
+					font-size: 1rem;
+				}
+
+				button {
+					background-color: #313131;
+					color: white;
+					border: none;
+					padding: 0.5rem;
+					border-radius: 4px;
+					font-size: 1rem;
+					cursor: pointer;
+				}
+
+				button:hover {
+					background-color: #0056b3;
+				}
+
+				#response {
+					margin-top: 0.5rem;
+					text-align: center;
+				}
+
+				.signup-link {
+					text-align: center;
+					margin-top: 1rem;
+					font-size: 0.9rem;
+				}
+			</style>
+		</head>
+		<body>
+			<div class="container">
+				<div class="login-box">
+					<h1>Login</h1>
+					<form id="login">
+						<input 
+							type="email" 
+							name="email" 
+							placeholder="Email (@example.com)" 
+							pattern="^[a-zA-Z0-9._%+-]+@example\.com$" 
+							required 
+						/>
+						<input 
+							type="password" 
+							name="password" 
+							placeholder="Password" 
+							pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" 
+							minlength="8" 
+							required 
+						/>
+						<button type="submit">Login</button>
+					</form>
+
+					<div id="response"></div>
+
+					<div class="signup-link">
+						<p>Need to create an account? <a href="/signup">Sign up</a></p>
+					</div>
+				</div>
+			</div>
+
+			<script>
+				document.addEventListener("DOMContentLoaded", function () {
+					const form = document.getElementById("login");
+					const response = document.getElementById("response");
+
+					form.addEventListener("submit", function (event) {
+						event.preventDefault();
+
+						if (!form.checkValidity()) {
+							response.innerHTML = "<p style='color:red;'>Please fill out the form correctly.</p>";
+							return;
+						}
+
+						const formData = new FormData(form);
+
+						htmx.ajax("POST", "/login", {
+							target: "#response",
+							swap: "innerHTML",
+							values: Object.fromEntries(formData.entries())
+						});
+					});
+				});
+			</script>
+		</body>
+	</html>
+}
