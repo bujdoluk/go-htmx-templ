@@ -1,6 +1,7 @@
 package main
 
 import (
+	"expvar"
 	"net/http"
 
 	"github.com/bujdoluk/go-htmx-templ/views"
@@ -18,10 +19,14 @@ func (app *application) helloHandler(w http.ResponseWriter, r *http.Request) {
 func (app *application) routes() http.Handler {
 	router := httprouter.New()
 
+	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthCheckHandler)
+
 	router.HandlerFunc(http.MethodGet, "/", app.mainHandler)
 	router.HandlerFunc(http.MethodGet, "/hello", app.helloHandler)
 
 	router.ServeFiles("/static/*filepath", http.Dir("static"))
+
+	router.Handler(http.MethodGet, "/debug/vars", expvar.Handler())
 
 	return router
 }
